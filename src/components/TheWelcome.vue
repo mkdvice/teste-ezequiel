@@ -14,7 +14,9 @@ export default {
   methods: {
     //form validation username/email field
     validateUsernameOrEmail() {
-      if (!this.usernameOrEmail || this.usernameOrEmail.length < 6 || this.usernameOrEmail.length > 50) {
+      if (!this.usernameOrEmail) {
+        this.usernameOrEmailError = 'Username or email is required.';
+      } else if (this.usernameOrEmail.length < 6 || this.usernameOrEmail.length > 50) {
         this.usernameOrEmailError = 'Username or email must be between 6 and 50 characters.';
       } else {
         this.usernameOrEmailError = '';
@@ -24,16 +26,20 @@ export default {
     //form validation password field
     validatePassword() {
       //regex and error handling 
-      const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{10,}$/;
-      if (!this.password || !passwordRegex.test(this.password)) {
-        this.passwordError = 'Password must be at least 10 characters and contain at least one alphabet, one symbol, and one number.';
+      if (!this.password) {
+        this.passwordError = 'Password is required.';
       } else {
-        this.passwordError = '';
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{10,}$/;
+        if (!passwordRegex.test(this.password)) {
+          this.passwordError = 'Password must contain at least one alphabet, one symbol, and one number, and be at least 10 characters long.';
+        } else {
+          this.passwordError = '';
+        }
       }
       this.validateForm();
     },
     validateForm() {
-      this.formValid = !this.usernameOrEmailError && !this.passwordError;
+      this.formValid = !this.usernameOrEmailError && !this.passwordError && this.usernameOrEmail && this.password;
     },
     //debouncing loading 5 seconds
     submitForm() {
@@ -86,13 +92,13 @@ export default {
           <form class="flex flex-col" id="form" @submit.prevent="submitForm">
 
             <input type="text" v-model="usernameOrEmail" placeholder="Username or email"
-              class="bg-[#333333] m-2 p-2 rounded" @input="validateUsernameOrEmail" />
+              class="bg-[#333333] m-2 p-2 rounded" @input="validateUsernameOrEmail" required/>
             <div v-if="usernameOrEmailError" class="text-red-600 text-sm font-medium p-3 flex md:hidden">{{
             usernameOrEmailError }}
             </div>
 
             <input type="password" v-model="password" placeholder="password " class="bg-[#333333] m-2 p-2 rounded"
-              @input="validatePassword" />
+              @input="validatePassword" required/>
             <div v-if="passwordError" class="text-red-600 text-sm font-medium p-3 flex md:hidden">{{ passwordError }}
             </div>
 
