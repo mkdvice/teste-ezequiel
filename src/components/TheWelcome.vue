@@ -80,7 +80,7 @@ export default {
 
 
 
-        <!-- {/* Star Login Form */} -->
+        <!-- {/* Start Login Form */} -->
         <div class="bg-[#565455] text-white flex-2 shadow-lg">
           <p class="m-4 font-sans font-bold">Log in with awesome new thing</p>
           <form class="flex flex-col" id="form" @submit.prevent="submitForm">
@@ -113,7 +113,7 @@ export default {
       </div>
       <!-- {/* End div middle page  */} -->
 
-      <!-- {/* Star Submit button */} -->
+      <!-- {/* Start Submit button */} -->
       <button
         class="hidden md:flex bg-[#FF5F33] rounded-full p-4 border-solid border-8 border-[#212526] ml-4 z-10 absolute"
         v-on:click.prevent="submitForm">
