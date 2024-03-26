@@ -8,11 +8,11 @@ export default {
       passwordError: '',
       formValid: false,
       submitting: false,
-      loginSuccess: false
+      loginSuccess: false,
+      emptyFields: false
     };
   },
   methods: {
-    //form validation username/email field
     validateUsernameOrEmail() {
       if (!this.usernameOrEmail) {
         this.usernameOrEmailError = 'Username or email is required.';
@@ -23,9 +23,7 @@ export default {
       }
       this.validateForm();
     },
-    //form validation password field
     validatePassword() {
-      //regex and error handling 
       if (!this.password) {
         this.passwordError = 'Password is required.';
       } else {
@@ -41,17 +39,22 @@ export default {
     validateForm() {
       this.formValid = !this.usernameOrEmailError && !this.passwordError && this.usernameOrEmail && this.password;
     },
-    //debouncing loading 5 seconds
     submitForm() {
+      if (this.usernameOrEmail === '' || this.password === '') {
+        this.emptyFields = true;
+        return;
+      }
+
       if (this.formValid) {
+        this.emptyFields = false;
         this.submitting = true;
         setTimeout(() => {
           // Simulate form submission success
           this.submitting = false;
           this.loginSuccess = true;
-          console.log("Username:", this.usernameOrEmail); // only to confirm the data
-          console.log("Password:", this.password); // only to confirm the data
-          console.log("Login successful!"); // only to confirm sucsess login
+          console.log("Username:", this.usernameOrEmail);
+          console.log("Password:", this.password);
+          console.log("Login successful!");
         }, 5000);
       }
     }
@@ -104,6 +107,8 @@ export default {
 
 
             <span><a href="#" class="m-2 text-sm ">Forgot you password?</a></span>
+            
+            <div v-if="emptyFields" class="text-red-600 text-sm font-medium p-3 flex md:hidden">Please fill in both username/email and password fields.</div>
             <button class=" md:hidden bg-[#FF5F33] rounded p-2 mt-4" type="submit" :disabled="!formValid || submitting">
               <font-awesome-icon v-if="submitting" :icon="['fas', 'spinner']" class="fa-xl text-white animate-spin" />
               <span v-else>Login</span>
@@ -152,5 +157,6 @@ export default {
     <div v-if="usernameOrEmailError" class="text-red-600 text-sm font-medium p-3 hidden md:flex">{{ usernameOrEmailError
       }}</div>
     <div v-if="loginSuccess" class="text-green-600 text-sm font-medium p-3 hidden md:flex">Login successful!</div>
+    <div v-if="emptyFields" class="text-red-600 text-sm font-medium p-3 hidden md:flex">Please fill in both username/email and password fields.</div>
   </main>
 </template>
